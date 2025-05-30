@@ -3,12 +3,12 @@ const db = mysql.createConnection({
     host: '127.0.0.1',
     port: 3306,
     user: 'root',
-    password: 'root',
+    password: '',
     database: 'bd_sistema_senai2',
     dateStrings: true
 });
-db.connect((erro)=>{
-    if(erro){
+db.connect((erro) => {
+    if (erro) {
         console.log('Erro ao conectar ao banco de dados');
         console.log(erro.message);
         return;

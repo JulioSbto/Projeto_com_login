@@ -1,0 +1,14 @@
+#caixa_login {
+  width: fit-content;
+  height: fit-content;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px black;
+  margin: auto;
+  margin-top: 20px;
+  padding: 20px;
+  text-align: center;
+}
+
+#caixa_login input {
+  margin-bottom: 20px;
+}
