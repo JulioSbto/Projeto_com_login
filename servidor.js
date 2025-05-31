@@ -50,7 +50,7 @@ app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, 'login.html'));
 })
 // Página de conta
-app.get("/conta", verificarAutenticado, (req, res) => {
+app.get("/conta", (req, res) => {
   res.sendFile(path.join(__dirname, 'conta.html'));
 })
 // Arquivo do estilo.css

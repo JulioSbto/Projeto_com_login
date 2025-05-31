@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <title>Conta</title>
 </head>
 <style>
@@ -27,7 +28,7 @@
 
     <script>
         function senhasIguais() {
-            if (('#caixa_senha1').val() == $('#caixa_senha2').val()) {
+            if ($('#caixa_senha1').val() == $('#caixa_senha2').val()) {
                 return true;
             } else {
                 return false;
@@ -39,7 +40,7 @@
                 alert("Ase senhas devem ser iguais!")
                 return
             }
-            var nomeCompleto = $("caixa_nome").val();
+            var nomeCompleto = $("#caixa_nome").val();
             var usuario = $("#caixa_usuario").val();
             var senha = $("#caixa_senha1").val();
 
