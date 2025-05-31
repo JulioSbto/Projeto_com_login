@@ -1,23 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
     <link rel="stylesheet" href="estilo">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 
 <body>
     <div id="caixa_login">
         <h1>Entrar</h1>
-        <input type="text" id="caixa_usuario" placeholder="Seu nome de usuário"> <br>
-        <input type="password" id="caixa_senha" placeholder="Sua senha"> <br>
-        <button>Entrar</button>
-        <span id="caixa_mensagem">Usuário e/ou Senha inválidos!</span>
+        <input type="text" id="caixa_usuario" placeholder="seu nome de usuário">
+        <input type="password" id="caixa_senha" placeholder="sua senha"> <br>
+        <button id="btn_entrar">Entrar</button> <br>
+        <center> <a href="/conta">Não tenho conta</a> </center>
+        <span id="caixa_mensagem">usuário e/ou Senha invalida!</span>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#caixa_mensagem").hide();
+        });
+        $("#btn_entrar").click(function () {
+            var usuario = $("#caixa_usuario").val();
+            var senha = $("#caixa_senha").val();
+            $.ajax({
+                url: 'http://localhost:3000/fazerLogin',
+                dataType: 'json',
+                contentType: 'application/json',
+                type: 'POST',
+                data: JSON.stringify({ usuario, senha }),
+                success: function (resposta) {
+                    if (resposta.msg == true) {
+                        window.location.href = '/';
+                    } else if (resposta.msg == false) {
+                        alert('Usuario/Senha incorreto')
+                    } else {
+                        alert(resposta.msg)
+                    }
+
+                },
+            })
+        });  //fim do btnEntrar
+    </script>
+
 </body>
 
 </html>

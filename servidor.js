@@ -3,7 +3,6 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const cors = require('cors');
-const { getSystemErrorMap } = require('util');
 
 const app = express();
 app.use(cors());
@@ -15,31 +14,70 @@ app.use(session({
   saveUninitialized: false,
   cookie: { maxAge: 15 * 60 * 1000 }
 }));
+// verificação de segurança
+function verificarAutenticado(req, res, next) {
+  if (req.session.usuarioLogado) {
+    next();
+  } else {
+    res.redirect('/login')
+  }
+}
 
-app.get("/", (req, res) => {
+// Endpoint p deslogar
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/login');
+})
+
+// Endpoint p cadastrar novos usuários
+app.post('/cadastrarUsuario', (req, res) => {
+  const { nomeCompleto, usuario, senha } = req.body;
+  db.query(`INSERT INTO tb_usuarios 
+  (nome, nome_usuario, senha_usuario) VALUES (?, ?, ?)`,
+    [nomeCompleto, usuario, senha], (erro, resultado) => {
+      if (erro) { return res.json({ msg: 'Falha ao cadastrar' + erro.message }) }
+      return res.json({ msg: "Cadastrado com sucesso" })
+    })
+})
+
+// Página principal
+app.get("/", verificarAutenticado, (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 })
 
+// Página de login 
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, 'login.html'));
 })
-
+// Página de conta
+app.get("/conta", verificarAutenticado, (req, res) => {
+  res.sendFile(path.join(__dirname, 'conta.html'));
+})
+// Arquivo do estilo.css
 app.get("/estilo", (req, res) => {
-  res.sendFile(path.join(__dirname, 'style.css'));
+  res.sendFile(path.join(__dirname, 'estilo.css'));
+})
+// Página outra
+app.get("/outra", verificarAutenticado, (req, res) => {
+  res.sendFile(path.join(__dirname, 'outra.html'));
 })
 
-app.get("/fazerLogin", (req, res) => {
+
+// Fazer login 
+app.post("/fazerLogin", (req, res) => {
   const { usuario, senha } = req.body;
   db.query('SELECT * FROM tb_usuarios WHERE nome_usuario=? AND senha_usuario=?',
     [usuario, senha], (erro, resultado) => {
-      if (erro) { return res.json({ msg: "Falha ao consultar " + erro.message }) }
+      if (erro) { return res.json({ msg: "Falhar ao consultar" + erro.message }) }
       if (resultado.length == 1) {
+        req.session.usuarioLogado = "Sim";
         return res.json({ msg: true })
       } else {
         return res.json({ msg: false })
       }
     })
-})
+
+});
 
 app.listen(3000, () => {
   console.log('Servidor rodando na porta 3000');
